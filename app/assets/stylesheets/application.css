@@ -179,3 +179,30 @@ a{
 	border: 2px solid #aaa;
 	padding: 15px;
 }
+
+
+
+#fb-signin-wrapper{
+	background: #385998;
+	padding: 0px;
+	margin: 10px auto;
+	height: 30px;
+	width: 150px;
+}
+
+#fb-signin-wrapper a{
+	color: #fff;
+	font-weight: bold;
+	font-size: 90%;
+	display: inline-block;
+	vertical-align: top;
+	line-height: 30px;
+}
+
+#fb-signin-wrapper img{
+	height: 30px;
+	margin: 0px;
+	margin-right: 5px;
+	display: inline-block;
+	vertical-align: top;
+}

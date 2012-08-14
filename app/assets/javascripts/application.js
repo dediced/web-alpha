@@ -16,7 +16,7 @@
 
 
 var FB_APP_ID = '361605033909866';
-var API_DOMAIN = 'http://engine.dediced.com';
+var API_DOMAIN = 'http://engine.dediced.com/api';
 
 $(document).ready(function(){
 	userBar.refresh();
