@@ -22,17 +22,16 @@ var API_DOMAIN = 'http://0.0.0.0:3000/api';
 $(document).ready(function(){
 	userBar.refresh();
 	if (window.location.hash.length>0){
-		var accessToken = window.location.hash.substring(1);
+		var accessToken = window.location.hash.substring(1).split('&')[0];
 		var url = "https://graph.facebook.com/me?"+accessToken;
 		$.ajax({
 			url: url,
 			dataType: 'json',
-			success: function(data){		
+			success: function(data){								
 				$.ajax({
-					url: API_DOMAIN+'/users/fb_signin.json?'+accessToken,
+					url: API_DOMAIN+'/users/fb_signin.json?'+accessToken+'&email='+data.email+'&first_name='+data.first_name+'&last_name='+data.last_name,
 					dataType: 'json',
-					data: data,
-					success: function(obj){
+					success: function(obj){						
 						$.cookie('token',obj.token, {expires: 7, path: '/'});
 						window.location = window.location.toString().split('#')[0]
 					}
