@@ -1,0 +1,181 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+ */
+
+
+body, html{
+	font-family:  helvetica,arial, sans-serif;
+	font-size: 14px;
+	padding: 0px;
+	margin: 0px;
+	height: 100%;
+}
+
+#non-footer{
+	background-image: url('/assets/furley_bg.png');
+	height: 100%;
+	margin-bottom: -30px;
+}
+
+#header-wrapper{
+	height: 50px;
+	background: #eee;
+/*	background-image: url('/assets/lil_fiber.png');*/
+	border-bottom: 2px solid #ddd;
+}
+
+.left-column{
+	width: 250px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.center-column{
+	width: 590px;
+	display: inline-block;
+	vertical-align: top;	
+}
+
+.right-column{
+	width: 250px;
+	display: inline-block;
+	vertical-align: top;	
+}
+
+
+
+#footer{
+	height: 30px;
+}
+
+#social-media{
+	color: #aaa;
+	text-shadow: 1px 1px 1px #fff;
+	margin: 0px;
+	margin-left: 15px;
+	padding: 0px 0px;
+	text-align: left;
+	vertical-align: top;
+	display: inline-block;
+/*	float: left;*/
+}
+
+#social-media a{
+	line-height: 30px;
+	margin-top: -7px;
+	display: inline-block;
+	vertical-align: top;
+	padding: 0px;
+	opacity: 0.5;
+}
+
+#social-media a:hover{
+	opacity: 1.0;
+}
+
+#about-us{
+	width: 100%;
+	text-align: right;
+	margin: 0px;
+	padding: 0px;
+	vertical-align: top;
+	display: inline-block;
+	list-style: none;	
+/*	float: left;*/
+}
+
+#about-us li{
+	display: inline-block;
+	padding: 0px 3px;
+	margin: 0px;
+}
+
+a{
+	text-decoration: none;
+}
+
+#about-us a{
+	color: #777;
+	text-shadow: 1px 1px 1px #fff;
+	vertical-align: top;
+}
+
+#copyright{
+	text-align: right;
+	color: #aaa;
+	text-shadow: 1px 1px 1px #fff;
+	
+}
+
+
+.wrapper{
+	width: 1100px;
+	margin: 0px auto;
+}
+
+#header .left-column{
+	text-align: right;
+}
+
+
+#icon-dediced{
+	height: 50px;
+	margin: 0px auto;
+}
+
+#user-bar{
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+#user-bar a{
+	display: inline-block;
+	padding: 17px;
+	color: #777;
+}
+
+#user-bar a:hover{
+	color: #fff;
+	background: #ddd;
+}
+
+#stage-layer{
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	z-index: 999;
+	background-image: url('/assets/black-transparent.png');
+}
+
+#stage-wrapper{
+	position: absolute;
+	left: 50%;
+}
+
+.stage{
+	position: relative;
+	left: -50%;
+}
+
+#login-wrapper{
+	width: 550px;
+	height: 300px;
+	background: #fff;
+	margin-top: 200px;
+	border-radius: 15px;
+	border: 2px solid #aaa;
+	padding: 15px;
+}
