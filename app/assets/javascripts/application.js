@@ -16,7 +16,8 @@
 
 
 var FB_APP_ID = '361605033909866';
-var API_DOMAIN = 'http://engine.dediced.com/api';
+// var API_DOMAIN = 'http://engine.dediced.com/api';
+var API_DOMAIN = 'http://0.0.0.0:3000/api';
 
 $(document).ready(function(){
 	userBar.refresh();
@@ -46,14 +47,17 @@ $(document).ready(function(){
 var userBar = {
 	wrapper: $('#user-bar'),
 	refresh: function(){
-		if ($.cookie('token')==null){
+		var token = $.cookie('token');
+		if (token==null){
 			var login = $('<li></li>').html('<a href="#" id="login-button"> Log In</a>').appendTo('#user-bar');
 			$(login).click(function(e){
 				e.preventDefault();
 				userBar.showLogin();			
 			})			
 		}else{
-			alert('signed in!');
+			$.ajax({
+				// url: API_DOMAIN + '/users/'
+			})
 		}
 	},
 	showLogin: function(){
