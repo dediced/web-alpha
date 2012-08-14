@@ -55,9 +55,54 @@ var userBar = {
 			})			
 		}else{
 			$.ajax({
-				// url: API_DOMAIN + '/users/'
+				url: API_DOMAIN + '/users/'+token+'/avatar.json',
+				dataType: 'json',
+				beforeSend: function(){
+					$('#user-bar').loading();
+				},
+				success: function(obj){
+					$('#user-bar').unloading();
+					if (obj.status=='success'){									
+						var name = $('<a href="#" id="name-link" name="'+obj.data.name+'"></a>').html(obj.data.fullname);
+						$('<li></li>').append(name).appendTo('#user-bar');
+
+						$(name).click(function(e){
+							e.preventDefault();
+							if ($('#user-nav').length>0){
+								$('#user-nav').slideUp('normal', function(){ $(this).remove();});
+							}else{
+								userBar.showUserNav(obj.data.name);
+							}
+
+						})
+					}else{
+						if (obj.status=='fail'){
+							alert('Did you log in somewhere else?');
+						}else{
+							alert('Oops, this is embarrassing. We will work on this error asap!');
+						}						
+						userBar.refresh();
+						$.cookie('token',null, {path:'/'});
+					}
+				}
 			})
 		}
+	},
+	showUserNav: function(name){
+		var root = $('<ul id="user-nav"></ul>');
+		$('<li></li>').html('<a id="user-nav-profile" href="/@'+name+'">Profile</a>').appendTo(root);
+		var signout = $('<a href="#" id="signout-link">Sign Out</a>');
+		$(signout).click(function(e){
+			e.preventDefault();
+			window.location = window.location
+			$.cookie('token',null, { path: '/' });
+			userBar.refresh();
+			$(root).slideUp();
+		})
+		$('<li></li>').append(signout).appendTo(root);
+
+		$(root).hide().appendTo('#header .right-column').slideDown();
+		
 	},
 	showLogin: function(){
 		var wrapper = $('<div id="login-wrapper"></div>');
@@ -73,4 +118,12 @@ jQuery.fn.onStage = function(){
 	var layer = $('<div id="stage-layer"></div>').hide().appendTo('body').fadeIn('fast');
 	var wrapper = $('<div id="stage-wrapper"></div>').appendTo(layer);
 	var stage = $(this).addClass('stage').hide().appendTo(wrapper).fadeIn();
+}
+
+jQuery.fn.loading = function(){
+	$(this).html('Loading...').addClass('loading');
+}
+
+jQuery.fn.unloading = function(){
+	$(this).empty().removeClass('loading');
 }
