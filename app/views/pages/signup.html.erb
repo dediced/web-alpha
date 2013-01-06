@@ -1,0 +1,90 @@
+<% content_for :head do %>
+	<script type="text/javascript" charset="utf-8">
+		$(document).ready(function(){
+			submitSignupForm();
+		})
+		function submitSignupForm(){
+			var form = $('#signup-form');
+			var email = $('#signup-email');
+			var firstname = $('#signup-firstname');
+			var lastname = $('#signup-lastname');
+			var password = $('#signup-password');
+			var password_confirmation = $('#signup-password-confirmation');
+			var submit = $('#signup-submit');
+			var submit_content = $(submit).html();
+			var emailReg = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+		
+			$(submit).click(function(e){
+				e.preventDefault();
+				validatesAndSubmitSignup();
+			})
+		
+			$('input').keypress(function(e){
+				if (e.keyCode==13){
+					validatesAndSubmitSignup();					
+				}
+			})
+		
+			function validatesAndSubmitSignup(){
+				resetMessage();
+				if (!emailReg.test($(email).val())){
+					$(email).addClass('invalid-input');
+					errorMessage('Are you sure this is your email?');
+				}else{
+					if ($(firstname).val().length==0){
+						$(firstname).addClass('invalid-input');
+						errorMessage('First name is required');
+					}else{
+						if ($(lastname).val().length==0){
+							$(lastname).addClass('invalid-input');
+							errorMessage('Last name is required');
+						}else{
+							if ($(password).val().length==0){
+								$(password).addClass('invalid-input');
+								errorMessage('Password is required');
+							}else{
+								if ($(password_confirmation).val()!=$(password).val()){
+									$(password_confirmation).addClass('invalid-input');
+									errorMessage('Did you type in the same password?');												
+								}else{
+									$.ajax({
+										url: API_DOMAIN+'/users/signup.json?email='+escape($(email).val())+'&first_name='+escape($(firstname).val())+'&last_name='+escape($(lastname).val())+'&password='+escape($(password).val())+'&password_confirmation='+escape($(password_confirmation).val()),
+										beforeSend: function(){
+											$(submit).loading();
+										},
+										success: function(obj){
+											$(submit).empty().unloading();
+											$(submit).html(submit_content);
+											// alert(obj.status);
+											if (obj.status==='success'){															
+												$(form).html(obj.message);
+												$.cookie('token', obj.token, {expires: 7, path: '/'});
+												// userBar.refresh($.cookie('token'));
+												setTimeout(function(){window.location = '/';}, 3000);
+											}else{
+												errorMessage(obj.message);
+											}
+										}
+									})
+								}
+							}
+						}
+					}
+				}
+
+			}
+		}
+	</script>
+<% end %>
+
+<div id="title">
+	We hate spam, just like you do.
+</div>
+<div id="signup-wrapper">
+	<input type="text" id="signup-email" placeholder="Email"/>
+	<input type="text" id="signup-firstname" placeholder="First name"/>
+	<input type="text" id="signup-lastname" placeholder="Last name"/>
+	<input type="password" id="signup-password" placeholder="Password"/>
+	<input type="password" id="signup-password-confirmation" placeholder="Password confirmation"/>
+	<a href="#" id="signup-submit"> Sign Up </a>
+</div>

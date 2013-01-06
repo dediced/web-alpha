@@ -1,60 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>DedicedWebAlpha</title>
+  <title>Dediced Web Alpha</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
-  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<!--  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script> !-->
   <%= javascript_include_tag "application" %>
+  <%= yield :head %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
 	<div id="non-footer">
 		<div id="header-wrapper">
-			<div id="header" class="wrapper">
-				<div class="left-column">
-					<img src='/assets/icon-dediced.png' id="icon-dediced">
-				</div>
-				<div class="center-column">
-					
-				</div>
-				<div class="right-column">
-					<ul id="user-bar">
-					</ul>
-				</div>
+			<div id="header">
+				<!-- <img src='/assets/icon-dediced.png' id="icon-dediced"> -->
+				<ul id="user-bar">
+				</ul>
 			</div>
 		</div>
-		<div id="content" class="wrapper">
-			<div class="left-column">
-			</div>
-			<div class="center-column">
-				<%= yield %>
-			</div>
-			<div class="right-column">
-			</div>
+		<div id="content">
+			<%= yield %>
 		</div>
 	</div>
-	<div id="footer" class="wrapper">
-		<div class="left-column">
-			<div id="social-media">Follow us on
-					<a href="https://plus.google.com/102627012757334564024" target="_blank"> <img src="/assets/dediced_gplus.png" height="30px"/></a>
-					<a href="https://www.facebook.com/dediced" target="_blank"> <img src="/assets/dediced_facebook.png" height="30px"/></a>
-					<a href="https://twitter.com/DedicedLLC" target="_blank"> <img src="/assets/dediced_twitter.png" height="30px"/></a>				
-			</div>
-		</div>
-		<div class="center-column">
-			<ul id="about-us">
-				<li> <a class="text" href="http://blog.dediced.com/?page_id=17" target="_blank"> about </a></li>
-				<li> <a class="text" href="http://blog.dediced.com/" target="_blank">blog</a></li>
-				<li> <a id="feedback" class="text" href="mailto:info@dediced.com">contact</a> </li>								
+	<div id="footer">
+		<div id="footer-cols">
+			<ul class="footer-col">
+				<li><h1>Dediced</h1></li>
+				<li><a href="/tutorial" target="_blank">Tutorial</a></li>
+				<li><a href="/pricing" target="_blank">Pricing</a></li>
+			</ul>
+			<ul class="footer-col">
+				<li><h1>Follow us</h1></li>
+				<li><a href="https://www.facebook.com/dediced" target="_blank">Facebook</a><!-- <img src="/assets/dediced_facebook.png" height="30px"/> --></li>
+				<li><a href="https://twitter.com/DedicedLLC" target="_blank">Twitter</a><!-- <img src="/assets/dediced_twitter.png" height="30px"/> --></li>
+				<li><a href="https://plus.google.com/102627012757334564024" target="_blank">Google Plus</a><!-- <img src="/assets/dediced_gplus.png" height="30px"/> --></li>
+			</ul>
+			<ul class="footer-col">
+				<li><h1>About</h1></li>
+				<li><a href="/tutorial" target="_blank">Mission</a></li>
+				<li><a href="/pricing" target="_blank">Team</a></li>
+			</ul>
+			<ul class="footer-col">
+				<li><h1>Support</h1></li>
+				<li><a href="/pricing" target="_blank">FAQ</a></li>
+				<li><a href="/tutorial" target="_blank">Contact us</a></li>			
 			</ul>
 		</div>
-		<div class="right-column">
-			<div id="copyright">Dediced LLC &copy 2011-2012</div>
-		</div>
+		<div id="copyright">Dediced LLC &copy 2011-2012</div>
 	</div>
-			
-
-
 </body>
 </html>
