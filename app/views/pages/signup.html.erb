@@ -48,14 +48,23 @@
 									errorMessage('Did you type in the same password?');												
 								}else{
 									$.ajax({
-										url: API_DOMAIN+'/users/signup.json?email='+escape($(email).val())+'&first_name='+escape($(firstname).val())+'&last_name='+escape($(lastname).val())+'&password='+escape($(password).val())+'&password_confirmation='+escape($(password_confirmation).val()),
+										url: API_DOMAIN+'/users/signup.json',
+										type: 'post',
+										data: {
+											email: escape($(email).val()),
+											firstname: escape($(firstname).val()),
+											lastname: escape($(lastname).val()),
+											password: escape($(password).val()),
+											password_confirmation: escape($(password_confirmation).val())
+										},
+										dataType: 'json',
 										beforeSend: function(){
-											$(submit).loading();
+											loading();
 										},
 										success: function(obj){
-											$(submit).empty().unloading();
-											$(submit).html(submit_content);
-											// alert(obj.status);
+											unloading();
+											$(submit).empty();
+											$(submit).html(submit_content);											
 											if (obj.status==='success'){															
 												$(form).html(obj.message);
 												$.cookie('token', obj.token, {expires: 7, path: '/'});
@@ -78,7 +87,7 @@
 <% end %>
 
 <div id="title">
-	We hate spam, just like you do.
+	We hate spams, just like you do.
 </div>
 <div id="signup-wrapper">
 	<input type="text" id="signup-email" placeholder="Email"/>

@@ -10,17 +10,56 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-//= require jquery
-//= require jquery_ujs
 //= require_tree .
 
 
 var FB_APP_ID = '361605033909866';
 // var API_DOMAIN = 'http://engine.dediced.com/api';
-var API_DOMAIN = 'http://0.0.0.0:3001/api';
+var API_DOMAIN = 'http://0.0.0.0:3001';
 
 $(document).ready(function(){
 	userBar.refresh();
+	$('#footer').animate({marginBottom: "-70px"}, 300).hover(
+		function(){
+			$(this).animate({marginBottom: "70px"}, 300);
+		},
+		function(){
+			$(this).animate({marginBottom: "-70px"}, 300);
+		});
+		// if (window.location.hash.length>0){
+		// 	var params = window.location.hash.substring(1).split('&');
+		// 	var accessToken = params[0].split('=')[1];
+		// 	var expires_in = params[1].split('=')[1];
+		// 	var now = new Date().getTime();
+		// 	var expires = now + parseInt(expires_in)*1000;
+		// 	$.cookie('fb_access_token', accessToken, {expires: 7, path: '/'});
+		// 	$.cookie('expires', expires, {expires: 7, path: '/'});
+		// 	var url = "https://graph.facebook.com/me?access_token="+accessToken;
+		// 	$.ajax({
+		// 		url: url,
+		// 		dataType: 'json',
+		// 		success: function(data){				
+		// 			$.ajax({
+		// 				url: API_DOMAIN+'/users/fb_signin.json?'+accessToken,
+		// 				dataType: 'json',
+		// 				type: 'post',
+		// 				data: data,
+		// 				success: function(obj){						
+		// 					$.cookie('token',obj.token, {expires: 7, path: '/'});
+		// 					$.cookie('username',obj.data.username, {expires: 7, path: '/'});
+		// 					track(ANALYTICS_URL+'&category=username&event=fb-login&token='+obj.data.username);				
+		// 					setTimeout(function(){window.location = '/user/'+obj.data.username}, 500);	
+		// 				}
+		// 			})
+		// 		}
+		// 	})
+		// }else{
+		// 	if ($.cookie('expires')!=null){
+		// 		if (parseInt($.cookie('expires')) < (new Date().getTime())){
+		// 			// window.location = 'https://www.facebook.com/dialog/oauth?client_id='+FB_APP_ID+'&redirect_uri='+DOMAIN+'&scope=email,user_checkins,xmpp_login&response_type=token';				
+		// 		}
+		// 	}
+		// }
 	if (window.location.hash.length>0){
 		var accessToken = window.location.hash.substring(1).split('&')[0];
 		var url = "https://graph.facebook.com/me?"+accessToken;
@@ -55,14 +94,25 @@ var userBar = {
 			})			
 		}else{
 			$.ajax({
-				url: API_DOMAIN + '/users/'+token+'/avatar.json',
+				url: API_DOMAIN + '/users/tiny.json',
+				type: 'get',
+				data: {
+					username: $.cookie('username')
+				},
 				dataType: 'json',
 				beforeSend: function(){
-					$('#user-bar').loading();
+					loading();
 				},
 				success: function(obj){
-					$('#user-bar').unloading();
-					if (obj.status=='success'){									
+					unloading();
+					if (obj.status=='success'){
+						var add = $('<a href="#" id="add"></a>').html('add +');
+						$('<li></li>').append(add).appendTo('#user-bar');
+						$(add).click(function(e){
+							e.preventDefault();
+							dice.launch();
+						})
+						
 						var name = $('<a href="#" id="name-link" name="'+obj.data.name+'"></a>').html(obj.data.fullname);
 						$('<li></li>').append(name).appendTo('#user-bar');
 
@@ -98,7 +148,7 @@ var userBar = {
 				url: API_DOMAIN+'/users/logout.json?token='+$.cookie('token'),
 				dataType: 'json',
 				beforeSend: function(){
-					$('#user-bar').loading();
+					loading();
 				},
 				success: function(data){
 					window.location = window.location
@@ -144,13 +194,19 @@ var userBar = {
 		function submitLogin(){
 			var submit_content = $(submit).html();
 			$.ajax({
-				url: API_DOMAIN+'/users/login.json?email='+escape($(email).val())+'&password='+escape($(password).val()),
+				url: API_DOMAIN+'/users/login.json',
+				type: 'post',
+				data: {
+					email: escape($(email).val()),
+					password: escape($(password).val())
+				},
 				dataType: 'json',
 				beforeSend: function(){
-					$(submit).loading();
+					loading();
 				},
 				success: function(obj){
-					$(submit).empty().unloading();
+					$(submit).empty();
+					unloading();
 					$(submit).html(submit_content);
 					if (obj.status=='success'){															
 						$.cookie('token', obj.token, {expires: 7, path: '/'});						

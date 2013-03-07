@@ -26,6 +26,7 @@ body, html{
 
 #non-footer{	
 	min-height: 100%;
+	padding-top: 50px;
 	margin-bottom: -147px;
 	padding-bottom: 160px;
 }
@@ -41,9 +42,14 @@ body, html{
 
 #header-wrapper{
 	height: 50px;
-	background: #eee;
+	width: 100%;
+	background: #fff;
 /*	background-image: url('/assets/lil_fiber.png');*/
 	border-bottom: 2px solid #ddd;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 9999;
 }
 
 #footer{
@@ -53,12 +59,9 @@ body, html{
 	bottom: 0px;
 	width: 100%;
 	background: #eee;
-	opacity: 0.6;
+/*	opacity: 0.6;*/
 }
 
-#footer:hover{
-	opacity: 0.9;
-}
 
 #social-media{
 	color: #aaa;
@@ -115,7 +118,7 @@ a{
 #copyright{
 	font-size: 80%;
 	position: absolute;
-	bottom: 15px;
+	top: 5px;
 	right: 15px;
 	color: #999;
 	text-shadow: 1px 1px 1px #eee;	
@@ -145,6 +148,11 @@ a{
 	margin: 0px;
 }
 
+#user-bar li{
+	display: inline-block;
+	vertical-align: top;
+}
+
 #user-bar a{
 	display: inline-block;
 	padding: 17px;
@@ -153,7 +161,7 @@ a{
 
 #user-bar a:hover{
 	color: #fff;
-	background: #ddd;
+	background: #ccc;
 }
 
 #stage-layer{
@@ -545,11 +553,13 @@ li:hover{
 	padding: 5px 7px;
 }
 
-#footer-cols{
+#footer-cols{	
+	margin: 0px;
 	padding-left: 50px;
 }
 
 .footer-col{
+	margin-top: 5px;	
 	display: inline-block;	
 	vertical-align: top;	
 }
