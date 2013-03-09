@@ -1,21 +1,7 @@
-// This is a manifest file that'll be compiled into application.js, which will include all the files
-// listed below..
-//
-// Any JavaScript/Coffee file within this directory, lib/assets/javascripts, vendor/assets/javascripts,
-// or vendor/assets/javascripts of plugins, if any, can be referenced here using a relative path.
-//
-// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
-// the compiled file.
-//
-// WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
-// GO AFTER THE REQUIRES BELOW.
-//
-//= require_tree .
-
-
 var FB_APP_ID = '361605033909866';
 // var API_DOMAIN = 'http://engine.dediced.com/api';
-var API_DOMAIN = 'http://0.0.0.0:3001';
+// var API_DOMAIN = 'http://localhost:3001';
+var api_domain = 'http://dediced-engine-2.heroku.com';
 
 $(document).ready(function(){
 	userBar.refresh();
@@ -85,8 +71,8 @@ $(document).ready(function(){
 var userBar = {
 	wrapper: $('#user-bar'),
 	refresh: function(){
-		var token = $.cookie('token');
-		if (token==null){
+		var api_token = $.cookie('api_token');
+		if (api_token==null){
 			var login = $('<li></li>').html('<a href="#" id="login-button"> Log In</a>').appendTo('#user-bar');
 			$(login).click(function(e){
 				e.preventDefault();
@@ -94,11 +80,8 @@ var userBar = {
 			})			
 		}else{
 			$.ajax({
-				url: API_DOMAIN + '/users/tiny.json',
+				url: API_DOMAIN + '/users/tiny/'+$.cookie('username')+'.json',
 				type: 'get',
-				data: {
-					username: $.cookie('username')
-				},
 				dataType: 'json',
 				beforeSend: function(){
 					loading();
@@ -113,15 +96,15 @@ var userBar = {
 							dice.launch();
 						})
 						
-						var name = $('<a href="#" id="name-link" name="'+obj.data.name+'"></a>').html(obj.data.fullname);
+						var name = $('<a href="#" id="name-link" name="'+obj.user_tiny.username+'"></a>').html(obj.user_tiny.name);
 						$('<li></li>').append(name).appendTo('#user-bar');
 
 						$(name).click(function(e){
-							e.preventDefault();
+							e.preventDefault();							
 							if ($('#user-nav').length>0){
 								$('#user-nav').slideUp('normal', function(){ $(this).remove();});
 							}else{
-								userBar.showUserNav(obj.data.name);
+								userBar.showUserNav(obj.user_tiny.name);
 							}
 
 						})
@@ -132,7 +115,7 @@ var userBar = {
 							alert('Oops, this is embarrassing. We will work on this error asap!');
 						}						
 						userBar.refresh();
-						$.cookie('token',null, {path:'/'});
+						$.cookie('api_token',null, {path:'/'});
 					}
 				}
 			})
@@ -140,27 +123,33 @@ var userBar = {
 	},
 	showUserNav: function(name){
 		var root = $('<ul id="user-nav"></ul>');
-		$('<li></li>').html('<a id="user-nav-profile" href="/@'+name+'">Profile</a>').appendTo(root);
-		var signout = $('<a href="#" id="signout-link">Log Out</a>');
-		$(signout).click(function(e){
+		$('<li></li>').html('<a id="user-nav-profile" href="/@'+$.cookie('username')+'">Profile</a>').appendTo(root);
+		var logout = $('<a href="#" id="signout-link">Log Out</a>');
+		$(logout).click(function(e){
 			e.preventDefault();
-			$.ajax({
-				url: API_DOMAIN+'/users/logout.json?token='+$.cookie('token'),
+			$.ajax({				
+				url: API_DOMAIN+'/users/logout.json',
+				type: 'post',
+				data: {
+					api_token: $.cookie('api_token')
+				},
 				dataType: 'json',
 				beforeSend: function(){
 					loading();
 				},
-				success: function(data){
-					window.location = window.location
-					$.cookie('token',null, { path: '/' });
+				success: function(data){					
+					unloading();
+					$.cookie('api_token',null, { path: '/' });
+					$.cookie('username',null, { path: '/' });
+					$.cookie('name',null, { path: '/' });
 					userBar.refresh();
 					$(root).slideUp();
+					window.location = window.location
 				}
 			})
 		})
-		$('<li></li>').append(signout).appendTo(root);
-
-		$(root).hide().appendTo('#header .right-column').slideDown();
+		$('<li></li>').append(logout).appendTo(root);	
+		$(root).hide().appendTo('#user-bar').slideDown();
 		
 	},
 	showLogin: function(){
@@ -208,8 +197,11 @@ var userBar = {
 					$(submit).empty();
 					unloading();
 					$(submit).html(submit_content);
-					if (obj.status=='success'){															
-						$.cookie('token', obj.token, {expires: 7, path: '/'});						
+					if (obj.status=='success'){	
+						// alert(JSON.stringify(obj));
+						$.cookie('api_token', obj.api_token, {expires: 7, path: '/'});
+						$.cookie('username', obj.user_tiny.username, {expires: 7, path: '/'});						
+						$.cookie('name', obj.user_tiny.name, {expires: 7, path: '/'});												
 						window.location = '/';
 					}else{
 						$('#stage-layer').fadeOut(function(){$(this).remove()});

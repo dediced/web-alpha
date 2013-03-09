@@ -1,5 +1,7 @@
-var domain = 'http://localhost:3000';
-var api_domain = 'http://localhost:3001/api';
+// var domain = 'http://localhost:3000';
+var domain = 'http://dediced-alpha.heroku.com';
+// var api_domain = 'http://localhost:3001';
+var api_domain = 'http://dediced-engine-2.heroku.com';
 var link = {
 	title: null,
 	img_src: null,
@@ -42,33 +44,70 @@ var dice = {
 		$('<li></li>').append(close).appendTo(control);
 		$(close).click(function(e){
 			e.preventDefault();
+			dice.url = $(url_field).val();
+			link.url = $(url_field).val();
 			dice.dismiss();
 		})
 		
 		var url = $('<div id="dicebar-url"></div>').appendTo(wrapper);
 		$('<div></div>').html('Add http://').appendTo(url);
 		var url_field = $('<input type="text" size="40" placeholder="domain.com/path">').appendTo(url);
+		$(url_field).keypress(function(e){
+			if (e.keyCode==13){
+				dice.url = $(url_field).val();
+				link.url = $(url_field).val();
+				dice.crawl();
+			}
+		})
 		var add = $('<a href="#" id="dicebar-url-add"></a>').html('enter').appendTo(url);
 		$(add).click(function(e){
 			e.preventDefault();
-			$('#dicepreview-canvas').fadeOut(function(){$(this).remove();});
-			$('#dicepreview-wrapper').fadeOut(function(){$(this).remove();});			
-			dice.url = $(url_field).val();
-			link.url = $(url_field).val();
 			dice.crawl();
 		})
 	},
+	save: function(){
+		$.ajax({
+			url: api_domain+'/links/create.json',
+			data: {
+				api_token: $.cookie('api_token'),
+				title: link.title,
+				img_src: link.img_src,
+				url: link.url
+			},
+			type: 'post',
+			dataType: 'json',
+			beforeSend: function(){
+				loading();
+			},
+			success: function(obj){				
+				unloading();
+				if(obj.status=='success'){
+					dice.dismiss();
+					link.show();					
+				}else{
+					errorMessage(obj.message);
+				}
+			}
+		})
+	},
 	crawl: function(){
+		$('#dicepreview-canvas').fadeOut(function(){$(this).remove();});
+		$('#dicepreview-wrapper').fadeOut(function(){$(this).remove();});			
+		
 		var canvas = $('<div id="dicepreview-canvas"></div>').hide().appendTo('body').fadeIn();
 		var wrapper = $('<div id="dicepreview-wrapper"></div>').hide().appendTo('body').fadeIn();
 		var dp = link.setup().hide().appendTo(wrapper);
 		var save = $('<a href="#" id="dice-save-button"></a>').html('save').hide().appendTo(wrapper).click(function(e){
 			e.preventDefault();
-			dice.dismiss();
-			link.show();			
+			dice.save();			
 		});
 		$.ajax({
-			url: api_domain+'/links/create.json?url='+dice.url+'&r='+Math.random(),
+			url: api_domain+'/links/preprocessing.json',
+			type: 'post',
+			data: {
+				url: dice.url,
+				r: Math.random()
+			},
 			dataType: 'json',
 			beforeSend: function(){
 				// loading();
@@ -79,7 +118,7 @@ var dice = {
 				}else{
 					link.setTitle(dice.url);
 				}
-				if (obj.status=='success' & obj.data.imgs.length < 0){
+				if (obj.status=='success' & obj.data.imgs.length > 0){
 					link.setImg(obj.data.imgs[0]);
 					dp.fadeIn();
 					console.log('image search result...'+ obj.data.imgs[0]);
@@ -88,31 +127,31 @@ var dice = {
 						e.preventDefault();
 						dice.gallery(obj.data.imgs);
 					})
-				}else{
-					console.log('Google image search...');
-					$.ajax({
-						url: api_domain+'/links/google_imgs.json?name='+encodeURIComponent($('#dicepreview-title').html())+'&r='+Math.random(),
-						dataType: 'json',
-						beforeSend: function(){
-							// loading();
-						},
-						success: function(obj2){
-							// unloading();
-							if (obj2.status=='success'){
-								console.log('Google image search result...'+ obj2.data[0]);
-								link.setImg(obj2.data[0]);
-								$(save).fadeIn();
-								dp.fadeIn();
-								link.dp_img.click(function(e){
-									e.preventDefault();
-									dice.gallery(obj2.data);
-								})
-							}else{
-								alert('unable to find images');
-							}
-						}
-					})
-				}
+				}// else{
+				// 					console.log('Google image search...');
+				// 					$.ajax({
+				// 						url: api_domain+'/links/google_imgs.json?name='+encodeURIComponent($('#dicepreview-title').html())+'&r='+Math.random(),
+				// 						dataType: 'json',
+				// 						beforeSend: function(){
+				// 							// loading();
+				// 						},
+				// 						success: function(obj2){
+				// 							// unloading();
+				// 							if (obj2.status=='success'){
+				// 								console.log('Google image search result...'+ obj2.data[0]);
+				// 								link.setImg(obj2.data[0]);
+				// 								$(save).fadeIn();
+				// 								dp.fadeIn();
+				// 								link.dp_img.click(function(e){
+				// 									e.preventDefault();
+				// 									dice.gallery(obj2.data);
+				// 								})
+				// 							}else{
+				// 								alert('unable to find images');
+				// 							}
+				// 						}
+				// 					})
+				// 				}
 			}
 		})
 		

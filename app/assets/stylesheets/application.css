@@ -34,6 +34,15 @@ body, html{
 #header{
 	position: relative;
 	height: 50px;
+	
+	background-size: 160px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+#icon-dediced{
+	display: inline-block;
+	height: 50px;
 	background-image: url('/assets/icon-dediced.png');
 	background-size: 160px;
 	background-repeat: no-repeat;
@@ -354,15 +363,16 @@ a{
 	border: 1px solid #aaa;
 	margin: 0px;
 	z-index: 999 !important;
+	position: fixed;
+	right: 0px;	
 }
 
 #user-nav li{
+	width: 100%;
 	list-style: none;
-	
-	
 }
 
-#user-nav li:hover{
+#user-nav li:hover{	
 }
 
 
@@ -472,6 +482,7 @@ li:hover{
 	text-align: center;
 	padding: 15px;
 	font-size: 120%;
+	z-index: 99999;
 /*	color: #fff;*/
 }
 

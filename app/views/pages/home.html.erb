@@ -37,8 +37,8 @@
 			offset: 0,
 			limit: 8,
 			add: function(v){
-				var wrapper = $('<a target="_blank" class="link"></a>').attr('href', v.url).hide().appendTo('.col-'+lw.curr);
-				var name = $('<div class="link-name"></div>').html(v.name).appendTo(wrapper);
+				var wrapper = $('<a target="_blank" class="link"></a>').attr('href', v.url).appendTo('.col-'+lw.curr).hide();
+				var name = $('<div class="link-name"></div>').html(v.title).appendTo(wrapper);
 				// var created_at = $('<div class="link-created"></div>').html(v.created).appendTo(link);
 				if (v.img!=null){
 					var img = new Image();
@@ -52,7 +52,8 @@
 				}
 				console.log(lw.curr+' id: '+v.id);
 				lw.curr = (lw.curr+1)%lw.N;
-				$(wrapper).fadeIn().click(function(e){
+				$(wrapper).fadeIn();
+				$(wrapper).click(function(e){
 					e.preventDefault();
 					link.setup();
 					link.url = v.url.split('://')[1];
@@ -80,7 +81,7 @@
 			},			
 			load: function(){
 				$.ajax({
-					url: API_DOMAIN+'/links.json?offset='+lw.offset+'&limit='+lw.limit,
+					url: API_DOMAIN+'/links/index.json?offset='+lw.offset+'&limit='+lw.limit,
 					dataType: 'json',
 					beforeSend: function(){
 						lw.loaded = false;
