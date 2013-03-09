@@ -1,7 +1,7 @@
 // var domain = 'http://localhost:3000';
 var domain = 'http://dediced-alpha.heroku.com';
 // var api_domain = 'http://localhost:3001';
-var api_domain = 'http://dediced-engine-2.heroku.com';
+var api_domain = 'http://dediced-engine-2.herokuapp.com';
 var link = {
 	title: null,
 	img_src: null,
