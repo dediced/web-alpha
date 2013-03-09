@@ -1,7 +1,7 @@
 var FB_APP_ID = '361605033909866';
 // var API_DOMAIN = 'http://engine.dediced.com/api';
 // var API_DOMAIN = 'http://localhost:3001';
-var api_domain = 'http://dediced-engine-2.heroku.com';
+var API_DOMAIN = 'http://dediced-engine-2.heroku.com';
 
 $(document).ready(function(){
 	userBar.refresh();
