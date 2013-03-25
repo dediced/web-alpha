@@ -47,7 +47,11 @@
 						var h = Math.round(150*img.height/img.width);					
 						console.log('h='+h+' img='+v.img);
 						if (h){
-							$(wrapper).attr('style','min-height: '+h+'px;background-image:url('+v.img+');background-repeat:no-repeat;background-size:cover;');
+							$(wrapper).attr('style','min-height: '+h+'px;background-image:url('+v.img+');background-repeat:no-repeat;background-size:cover;');							
+							console.log(h+" "+name.height());
+							if(h < name.height()){
+								wrapper.attr('style', 'height: '+(name.height()+10)+'px;');
+							}
 							$(name).addClass('with-img');						
 						}
 					}, 100)					

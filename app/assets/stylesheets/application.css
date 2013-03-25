@@ -549,6 +549,7 @@ li:hover{
 }
 
 .link-name{
+	
 	text-align: center;
 	bottom: 0px;
 	width: 136px;
@@ -556,6 +557,8 @@ li:hover{
 }
 
 .link-name.with-img{
+	overflow: hidden;
+	vertical-align: top;
 	text-align: center;
 	position: absolute;
 	bottom: 0px;
