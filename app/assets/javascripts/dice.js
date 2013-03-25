@@ -23,10 +23,12 @@ var link = {
 		link.dp_img.attr('src', src);
 	},
 	show: function(){
+		loading();
 		$('#content').empty();
 		var wrapper = $('<div id="link-wrapper"></div>').appendTo('#content');
 		$('<div id="link-left"></div>').append(link.dp).hide().appendTo(wrapper).delay(100).show("slide", {direction: "right"}, 500);;
 		$('<div id="link-right"></div>').append($('<iframe width=100% height=100%></iframe').attr('src', 'http://'+link.url)).appendTo(wrapper);
+		unloading();
 	}
 }
 
@@ -85,6 +87,7 @@ var dice = {
 					dice.dismiss();
 					link.show();					
 				}else{
+					dice.dismiss();
 					errorMessage(obj.message);
 				}
 			}
@@ -110,7 +113,7 @@ var dice = {
 			},
 			dataType: 'json',
 			beforeSend: function(){
-				// loading();
+				loading();
 			},
 			success: function(obj){
 				if (obj.status=='success'){
@@ -127,31 +130,10 @@ var dice = {
 						e.preventDefault();
 						dice.gallery(obj.data.imgs);
 					})
-				}// else{
-				// 					console.log('Google image search...');
-				// 					$.ajax({
-				// 						url: api_domain+'/links/google_imgs.json?name='+encodeURIComponent($('#dicepreview-title').html())+'&r='+Math.random(),
-				// 						dataType: 'json',
-				// 						beforeSend: function(){
-				// 							// loading();
-				// 						},
-				// 						success: function(obj2){
-				// 							// unloading();
-				// 							if (obj2.status=='success'){
-				// 								console.log('Google image search result...'+ obj2.data[0]);
-				// 								link.setImg(obj2.data[0]);
-				// 								$(save).fadeIn();
-				// 								dp.fadeIn();
-				// 								link.dp_img.click(function(e){
-				// 									e.preventDefault();
-				// 									dice.gallery(obj2.data);
-				// 								})
-				// 							}else{
-				// 								alert('unable to find images');
-				// 							}
-				// 						}
-				// 					})
-				// 				}
+				}else{
+					dp.fadeIn();
+				}
+				unloading();
 			}
 		})
 		
@@ -176,6 +158,7 @@ var dice = {
 		$(wrapper).fadeIn();
 	},
 	dismiss: function(){
+		console.log("dice dismissed");
 		if ($('#dicebar-wrapper').length>0){
 			$('#dicebar-wrapper').hide("slide", {direction: "up"}, 300, function(){$(this).remove();});
 		}

@@ -1,17 +1,17 @@
 var FB_APP_ID = '361605033909866';
-// var API_DOMAIN = 'http://engine.dediced.com/api';
 // var API_DOMAIN = 'http://localhost:3001';
 var API_DOMAIN = 'http://dediced-engine-2.herokuapp.com';
 
 $(document).ready(function(){
 	userBar.refresh();
-	$('#footer').animate({marginBottom: "-70px"}, 300).hover(
+	// loading();
+	$('#footer').animate({opacity: "0.7", marginBottom: "-70px"}, 1000).hover(
 		function(){
-			$(this).animate({marginBottom: "70px"}, 300);
+			$(this).animate({opacity: "1.0", marginBottom: "0px", height:"+=20"}, 1000);
 		},
 		function(){
-			$(this).animate({marginBottom: "-70px"}, 300);
-		});
+			$(this).animate({opacity: "0.7", marginBottom: "-70px", height:"-=20"}, 1000);
+	});
 		// if (window.location.hash.length>0){
 		// 	var params = window.location.hash.substring(1).split('&');
 		// 	var accessToken = params[0].split('=')[1];
@@ -225,12 +225,23 @@ jQuery.fn.onStage = function(){
 	})
 }
 
+var loadingInterval;
+
 function loading(){
-	unloading();
-	$('<div id="loading"></div>').html('loading').hide().appendTo('body').fadeIn();
+	// alert("loading");
+	if($("#loading").length==0){		
+		var loading = $('<div id="loading"></div>').hide().prependTo("body").fadeIn();
+		var src = "/assets/loading/loading";
+		var i = 1;
+		var img = $('<img>').attr('src', src+'_'+i+'.png').appendTo(loading);
+		loadingInterval = setInterval(function(){$(img).attr('src', src+'_'+i+'.png'); i = (i+1)%26+1;}, 120);		
+	}else{
+		unloading();
+	}
 }
 
 function unloading(){
+	window.clearInterval(loadingInterval);
 	$('#loading').remove();//fadeOut(function(){$(this).remove();});
 }
 

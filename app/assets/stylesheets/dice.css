@@ -75,21 +75,23 @@
 	width: 100%;
 	opacity: 0.9;
 	background: #fff;
+	z-index: 999;
 }
 
 #dicepreview-wrapper{
 	position: fixed;
-	top: 50px;
+	top: 10px;
 	left: 0px;
 	height: 100%;
 	width: 100%;
-	
+	margin-top: 100px;
+	z-index: 9999;
 }
 
 #dicepreview{
 	width: 150px;
 	margin: 0px auto;
-	margin-top: 100px;
+	margin-top: 10px;
 }
 
 #dicepreview-title{
