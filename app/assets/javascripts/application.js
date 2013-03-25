@@ -194,8 +194,7 @@ var userBar = {
 					loading();
 				},
 				success: function(obj){
-					$(submit).empty();
-					unloading();
+					$(submit).empty();					
 					$(submit).html(submit_content);
 					if (obj.status=='success'){	
 						// alert(JSON.stringify(obj));
@@ -207,6 +206,7 @@ var userBar = {
 						$('#stage-layer').fadeOut(function(){$(this).remove()});
 						errorMessage(obj.message);
 					}
+					unloading();
 				}
 			})
 			

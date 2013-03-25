@@ -46,24 +46,33 @@ var dice = {
 		$('<li></li>').append(close).appendTo(control);
 		$(close).click(function(e){
 			e.preventDefault();
-			dice.url = $(url_field).val();
-			link.url = $(url_field).val();
 			dice.dismiss();
 		})
 		
 		var url = $('<div id="dicebar-url"></div>').appendTo(wrapper);
 		$('<div></div>').html('Add http://').appendTo(url);
 		var url_field = $('<input type="text" size="40" placeholder="domain.com/path">').appendTo(url);
+		function getUrl(){
+			var uv = $(url_field).val();
+			var uvs = uv.split("://");
+			if(uvs.length>1){
+				uv = uvs[1];
+				$(url_field).val(uv);
+			}
+			return uv;
+		}
 		$(url_field).keypress(function(e){
 			if (e.keyCode==13){
-				dice.url = $(url_field).val();
-				link.url = $(url_field).val();
+				dice.url = getUrl();
+				link.url = getUrl();
 				dice.crawl();
 			}
 		})
 		var add = $('<a href="#" id="dicebar-url-add"></a>').html('enter').appendTo(url);
 		$(add).click(function(e){
 			e.preventDefault();
+			dice.url = getUrl();
+			link.url = getUrl();
 			dice.crawl();
 		})
 	},
