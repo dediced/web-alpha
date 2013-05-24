@@ -605,3 +605,23 @@ li:hover{
 .footer-col img{
 	
 }
+
+
+#link-sync{
+	width: 500px;
+	margin: 20px auto;
+	text-align: center;
+}
+
+#link-sync-button{
+	background: #0af;
+	padding: 5px 10px;
+	border-radius: 5px;
+	color: #fff;
+}
+
+#link-sync-status{
+	color: #059;
+	padding: 20px 0px;
+	font-size: 80%;
+}

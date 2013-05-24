@@ -1,0 +1,172 @@
+<% content_for :head do%>
+	<script type="text/javascript" charset="utf-8">	
+		$(document).ready(function(){
+			lw.launch();
+		});
+		
+		// $(window).resize(function(){
+		// 	console.log('resize');
+		// })
+		
+		// function loadItemImages(query, column){
+		// 		wrapper = $('#imgs-wrapper');
+		// 		$.ajax({
+		// 			url: API_DOMAIN+'/spiders/img_search.json?q='+encodeURI(query.split(' ').join('%20').replace(/&/g, "").replace(/>/g, "").replace(/</g, "").replace(/"/g, "")),
+		// 			dataType: 'json',
+		// 			beforeSend: function(){
+		// 				$(wrapper).loading();
+		// 			},
+		// 			success: function(obj){
+		// 				$(wrapper).empty().unloading();
+		// 				$('<div id="imgs-title"></div>').html('Images suggested by <img src="/assets/google_logo.png">').appendTo(wrapper);			
+		// 				for (i=0; i<column; i++){
+		// 					$('<div id="imgs-column-'+i+'" class="imgs-column"></div>').appendTo(wrapper);
+		// 				}
+		// 				$.each(obj.data.slice(0,column*2), function(i,v){				
+		// 					$('<img class="google-image">').attr('src',v).appendTo('#imgs-column-'+(i%column));
+		// 				})
+		// 			}
+		// 		})
+		// 	}
+		
+		var lw = {
+			loaded: false,
+			more: true,
+			N: Math.round((document.width)/150)-1,
+			curr: 0,
+			offset: 0,
+			limit: 8,
+			username: null,
+			add: function(v){
+				var wrapper = $('<a target="_blank" class="link"></a>').attr('href', v.url).appendTo('.col-'+lw.curr).hide();
+				var name = $('<div class="link-name"></div>').html(v.title).appendTo(wrapper);
+				// var created_at = $('<div class="link-created"></div>').html(v.created).appendTo(link);
+				if (v.img!=null){
+					var img = new Image();
+					img.src = v.img;
+					setTimeout(function(){
+						var h = Math.round(150*img.height/img.width);					
+						console.log('h='+h+' img='+v.img);
+						if (h){
+							$(wrapper).attr('style','min-height: '+h+'px;background-image:url('+v.img+');background-repeat:no-repeat;background-size:cover;');							
+							console.log(h+" "+name.height());
+							if(h < name.height()){
+								wrapper.attr('style', 'height: '+(name.height()+10)+'px;');
+							}
+							$(name).addClass('with-img');						
+						}
+					}, 200)					
+				}
+				console.log(lw.curr+' id: '+v.id);
+				lw.curr = (lw.curr+1)%lw.N;
+				$(wrapper).fadeIn();
+				$(wrapper).click(function(e){
+					e.preventDefault();
+					link.setup();
+					link.url = v.url;
+					link.setTitle(v.title);
+					link.setImg(v.img);
+					link.show();
+				});;
+			},
+			launch: function(){
+				lw.username = $('#username').attr('username');
+				if (lw.N>8){
+					lw.N=6;
+				}
+
+				if(lw.username==$.cookie('username')){
+					$('#link-sync-button').click(function(e){
+						e.preventDefault();
+						lw.sync();
+					})
+				}else{
+					$('#link-sync').remove();
+				}			
+
+				$("#links").attr('style', 'width:'+160*lw.N+'px;');
+				for (var i=0;i<lw.N;i++){
+					$('<div class="links-col"></div>').addClass('col-'+i).appendTo('#links');
+				}
+				lw.load();
+				$(window).scroll(function (){
+	                if (($(window).scrollTop() + $(window).height() >= $(document).height()) & lw.more & lw.loaded) {                     
+						console.log('scroll to bottom');
+	                    lw.load();
+	                }
+	            })
+				
+			},			
+			load: function(){
+				$.ajax({
+					url: API_DOMAIN+'/links/index.json?offset='+lw.offset+'&limit='+lw.limit+'&username='+lw.username,
+					dataType: 'json',
+					beforeSend: function(){
+						lw.loaded = false;
+						loading();
+					},
+					success: function(obj){						
+						console.log('loaded offset: '+lw.offset);
+						$.each(obj.data, function(i,v){
+							lw.add(v);
+						})
+						if (obj.data.length > 0){
+							lw.offset += lw.limit;
+							if ($('#links').height() < $(window).height()){
+								lw.load();
+							}							
+						}else{
+							lw.more = false;
+						}
+						lw.loaded = true;
+						unloading();
+					}
+				});
+			},
+			sync: function(){
+				$.ajax({
+					url: OLD_API_DOMAIN+'/api/links/package.json?email='+$.cookie('email'),
+					dataType: 'json',
+					beforeSend: function(){						
+						$('#link-sync-status').html('loading...');
+					},
+					success: function(obj){						
+						$('#link-sync-status').html(obj.data.length);
+						$.each(obj.data, function(i,v){
+							var m = lw.syncLink(i,v,obj.data.length);
+							
+						})						
+					}
+				});
+			},
+			syncLink: function(i,v,N){
+				$.ajax({
+					url: API_DOMAIN+'/links/sync.json?api_token='+$.cookie('api_token'),
+					dataType: 'json',
+					data: v,
+					beforeSend: function(){
+						console.log("sending..");
+					},
+					success: function(obj){
+						if(obj.status=='success'){
+							console.log("url: "+JSON.stringify(obj.data));
+							lw.add(obj.data);							
+							var m = "success";
+						}else{
+							var m = obj.message;
+						}			
+						$('#link-sync-status').html((i+1)+"/"+N+" : "+m);
+					}
+				});
+			},
+		}
+	</script>
+<% end %>
+
+<div style="display: none;" id="username" username="<%=params[:username]%>"></div>
+<div id="link-sync">
+	<a href="#" id="link-sync-button">synchronize</a>
+	<div id="link-sync-status">status</div>
+</div>
+<div id="links">
+</div>

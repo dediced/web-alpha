@@ -1,6 +1,8 @@
 var FB_APP_ID = '361605033909866';
-// var API_DOMAIN = 'http://localhost:3001';
+// var API_DOMAIN = 'http://localhost:3000';
+// var OLD_API_DOMAIN = 'http://localhost:3001';
 var API_DOMAIN = 'http://dediced-engine-2.herokuapp.com';
+var API_DOMAIN = 'http://dediced.herokuapp.com';
 
 $(document).ready(function(){
 	userBar.refresh();
@@ -142,6 +144,7 @@ var userBar = {
 					$.cookie('api_token',null, { path: '/' });
 					$.cookie('username',null, { path: '/' });
 					$.cookie('name',null, { path: '/' });
+					$.cookie('email',null, { path: '/' });
 					userBar.refresh();
 					$(root).slideUp();
 					window.location = window.location
@@ -200,7 +203,8 @@ var userBar = {
 						// alert(JSON.stringify(obj));
 						$.cookie('api_token', obj.api_token, {expires: 7, path: '/'});
 						$.cookie('username', obj.user_tiny.username, {expires: 7, path: '/'});						
-						$.cookie('name', obj.user_tiny.name, {expires: 7, path: '/'});												
+						$.cookie('name', obj.user_tiny.name, {expires: 7, path: '/'});
+						$.cookie('email', obj.email, {expires: 7, path: '/'});
 						window.location = '/';
 					}else{
 						$('#stage-layer').fadeOut(function(){$(this).remove()});

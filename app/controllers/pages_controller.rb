@@ -7,4 +7,7 @@ class PagesController < ApplicationController
   
   def home
   end
+
+  def userProfile  	
+  end
 end

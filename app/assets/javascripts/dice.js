@@ -109,8 +109,9 @@ var dice = {
 		var canvas = $('<div id="dicepreview-canvas"></div>').hide().appendTo('body').fadeIn();
 		var wrapper = $('<div id="dicepreview-wrapper"></div>').hide().appendTo('body').fadeIn();
 		var dp = link.setup().hide().appendTo(wrapper);
-		var save = $('<a href="#" id="dice-save-button"></a>').html('save').hide().appendTo(wrapper).click(function(e){
+		var save = $('<a href="#" id="dice-save-button"></a>').html('save').hide().appendTo(dp).click(function(e){
 			e.preventDefault();
+			$(this).remove();
 			dice.save();			
 		});
 		$.ajax({
@@ -148,9 +149,9 @@ var dice = {
 		
 	},
 	gallery: function(imgs){
-		var N = 5;
+		var N = 7;
 		link.dp.hide();
-		var wrapper = $('<div id="dicepreview-gallery"></div>').hide().appendTo('#dicepreview-wrapper');
+		var wrapper = $('<div id="dicepreview-gallery"></div>').empty().hide().appendTo('#dicepreview-wrapper');
 		for (var i=0; i<N; i++){
 			$('<div class="dg-col"></div>').attr('id', 'dg-'+i).appendTo(wrapper);
 		}
