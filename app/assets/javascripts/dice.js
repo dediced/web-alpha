@@ -22,12 +22,22 @@ var link = {
 		link.img_src = src;
 		link.dp_img.attr('src', src);
 	},
+	set: function(data){
+		link.setTitle(data.link.title);
+		link.setImg(data.link.img);
+		var share = $('<div class="dicepreview-share"></div>').appendTo(link.dp);
+		$('<a class="dicepreview-share-user"> </a> ').html(data.user.name + " ").attr("href",'/@'+data.user.username).appendTo(share);
+		$(' <span class="dicepreview-share-note"> </span> ').html(data.note + " ").appendTo(share);
+		$(' <span class="dicepreview-share-timestamp"> </span> ').html(data.link.created_at).appendTo(share);
+	},
 	show: function(){
 		loading();
 		$('#content').empty();
 		var wrapper = $('<div id="link-wrapper"></div>').appendTo('#content');
 		$('<div id="link-left"></div>').append(link.dp).hide().appendTo(wrapper).delay(100).show("slide", {direction: "right"}, 500);;
-		$('<div id="link-right"></div>').append($('<iframe width=100% height=100%></iframe').attr('src', 'http://'+link.url)).appendTo(wrapper);
+		var iframe = $('<iframe id="link_iframe" width=100% height=100%></iframe').attr('src', 'http://'+link.url);
+		
+		$('<div id="link-right"></div>').append(iframe).appendTo(wrapper);
 		unloading();
 	}
 }

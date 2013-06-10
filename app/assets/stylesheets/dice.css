@@ -95,17 +95,37 @@
 }
 
 #dicepreview-title{
-	color: #fff;
-	padding: 5px 7px;
+	font-size: 120%;
+	color: #000;
+	padding: 5px 0px;
 	margin: 2px 0px;
 	width: 136px;
-	background: #aaa;
+	/*background: #aaa;*/
 }
 
 #dicepreview-img{
 	margin: 5px 0px;
 	width: 150px;
 	border: 1px solid #aaa;
+}
+
+.dicepreview-share{
+	margin: 10px 0px;
+}
+
+.dicepreview-share-user{
+	color: #0af;
+	font-size: 80%;
+	padding-right: 5px;
+}
+
+.dicepreview-share-note{	
+	font-size: 90%;
+}
+
+.dicepreview-share-timestamp{
+	color: #777;
+	font-size: 70%;
 }
 
 

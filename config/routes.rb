@@ -3,4 +3,5 @@ DedicedWebAlpha::Application.routes.draw do
   
   match '/signup' => 'pages#signup'
   match '/@:username' => 'pages#userProfile'
+  match '/links/:linkname' => 'pages#linkProfile'
 end

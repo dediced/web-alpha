@@ -1,0 +1,25 @@
+<% content_for :head do%>
+	<script type="text/javascript" charset="utf-8">	
+		$(document).ready(function(){
+			$.ajax({
+				url: API_DOMAIN + '/links/full/' + $('#linkname').attr('linkname') + '.json',
+				type: 'get',
+				dataType: 'json',
+				beforeSend: function(){
+					loading();
+				},
+				success: function(obj){
+					unloading();					
+					link.setup();
+					link.url = obj.data.link.url;
+					link.set(obj.data);
+					// link.setTitle(v.title);
+					// link.setImg(v.img);
+					link.show();
+				}
+			})			
+		});		
+	</script>
+<% end %>
+
+<div style="display: none;" id="linkname" linkname="<%=params[:linkname]%>"></div>

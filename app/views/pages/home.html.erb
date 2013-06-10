@@ -37,7 +37,7 @@
 			offset: 0,
 			limit: 8,
 			add: function(v){
-				var wrapper = $('<a target="_blank" class="link"></a>').attr('href', v.url).appendTo('.col-'+lw.curr).hide();
+				var wrapper = $('<a class="link"></a>').attr('href', "/links/"+v.linkname).appendTo('.col-'+lw.curr).hide();
 				var name = $('<div class="link-name"></div>').html(v.title).appendTo(wrapper);
 				// var created_at = $('<div class="link-created"></div>').html(v.created).appendTo(link);
 				if (v.img!=null){
@@ -59,14 +59,7 @@
 				console.log(lw.curr+' id: '+v.id);
 				lw.curr = (lw.curr+1)%lw.N;
 				$(wrapper).fadeIn();
-				$(wrapper).click(function(e){
-					e.preventDefault();
-					link.setup();
-					link.url = v.url;
-					link.setTitle(v.title);
-					link.setImg(v.img);
-					link.show();
-				});;
+
 			},
 			launch: function(){
 				if (lw.N>8){

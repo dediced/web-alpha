@@ -10,4 +10,7 @@ class PagesController < ApplicationController
 
   def userProfile  	
   end
+
+  def linkProfile  	
+  end
 end
