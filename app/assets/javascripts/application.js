@@ -4,16 +4,42 @@ var FB_APP_ID = '361605033909866';
 var API_DOMAIN = 'http://dediced-engine-2.herokuapp.com';
 var OLD_API_DOMAIN = 'http://dediced.heroku.com';
 
+function showFooter(e, obj){
+	$(obj).removeClass('footer-hidden').addClass('footer-shown');
+	$(obj).animate({opacity: "1.0", marginBottom: "0px", height:"+=20"}, 1000);
+	$(obj).unbind('click');
+	$(obj).bind('click', function(e){
+		hideFooter(e, this);
+	});
+}
+
+function hideFooter(e, obj){
+	$(obj).removeClass('footer-shown').addClass('footer-hidden');
+	$(obj).animate({opacity: "0.7", marginBottom: "-70px", height:"-=20"}, 1000);
+	$(obj).unbind('click');
+	$(obj).bind('click', function(e){
+		showFooter(e, this);
+	});
+}
+
 $(document).ready(function(){
 	userBar.refresh();
 	// loading();
-	$('#footer').animate({opacity: "0.7", marginBottom: "-70px"}, 1000).hover(
-		function(){
-			$(this).animate({opacity: "1.0", marginBottom: "0px", height:"+=20"}, 1000);
-		},
-		function(){
-			$(this).animate({opacity: "0.7", marginBottom: "-70px", height:"-=20"}, 1000);
+	$('#footer').animate({opacity: "0.7", marginBottom: "-70px"}, 1000)
+				.addClass('footer-hidden');
+	$('.footer-hidden').click(function(e){
+		showFooter(e,this);
 	});
+	// $('.footer-shown').click(function(e){
+	// 	hideFooter(e, this);
+	// });
+	// $('#footer').animate({opacity: "0.7", marginBottom: "-70px"}, 1000).hover(
+	// 	function(){
+	// 		$(this).animate({opacity: "1.0", marginBottom: "0px", height:"+=20"}, 1000);
+	// 	},
+	// 	function(){
+	// 		$(this).animate({opacity: "0.7", marginBottom: "-70px", height:"-=20"}, 1000);
+	// });
 		// if (window.location.hash.length>0){
 		// 	var params = window.location.hash.substring(1).split('&');
 		// 	var accessToken = params[0].split('=')[1];

@@ -64,14 +64,27 @@ body, html{
 #footer{
 /*	height: 120px;*/
 /*	position: relative;*/
+	border-top: 1px solid #ccc;
 	position: fixed;
 	bottom: 0px;
 	width: 100%;
 	background: #eee;
 	z-index: 999999;
 /*	opacity: 0.6;*/
+	transition-duration: 1s;
+	-webkit-transition-duration: 1s;
+	transition-property: opacity;
+	-webkit-transition-property: opacity;
 }
 
+.footer-hidden, .footer-shown{
+	cursor: pointer;
+	cursor: hand;	
+}
+
+.footer-hidden:hover{
+	opacity: 1.0 !important;
+}
 
 #social-media{
 	color: #aaa;
