@@ -32,10 +32,11 @@
 		var lw = {
 			loaded: false,
 			more: true,
-			N: Math.round((document.width)/150)-1,
+			N: 3, //Math.round((document.width)/150)-1,
 			curr: 0,
 			offset: 0,
 			limit: 8,
+			w: 250,
 			add: function(v){
 				var wrapper = $('<a class="link"></a>').attr('href', "/links/"+v.linkname).appendTo('.col-'+lw.curr).hide();
 				var name = $('<div class="link-name"></div>').html(v.title).appendTo(wrapper);
@@ -44,7 +45,7 @@
 					var img = new Image();
 					img.src = v.img;
 					setTimeout(function(){
-						var h = Math.round(150*img.height/img.width);					
+						var h = Math.round(lw.w*img.height/img.width);					
 						console.log('h='+h+' img='+v.img);
 						if (h){
 							$(wrapper).attr('style','min-height: '+h+'px;background-image:url('+v.img+');background-repeat:no-repeat;background-size:cover;');							
@@ -65,7 +66,7 @@
 				if (lw.N>8){
 					lw.N=6;
 				}
-				$("#links").attr('style', 'width:'+160*lw.N+'px;');
+				$("#links").attr('style', 'width:'+(lw.w+10)*lw.N+'px;');
 				for (var i=0;i<lw.N;i++){
 					$('<div class="links-col"></div>').addClass('col-'+i).appendTo('#links');
 				}
