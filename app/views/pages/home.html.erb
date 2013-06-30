@@ -45,7 +45,10 @@
 					var img = new Image();
 					img.src = v.img;
 					setTimeout(function(){
-						var h = Math.round(lw.w*img.height/img.width);					
+						var h = Math.round(lw.w*img.height/img.width);
+						if (h > lw.w*1.5){
+							h = lw.w;
+						}					
 						console.log('h='+h+' img='+v.img);
 						if (h){
 							$(wrapper).attr('style','min-height: '+h+'px;background-image:url('+v.img+');background-repeat:no-repeat;background-size:cover;');							
