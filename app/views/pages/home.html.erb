@@ -38,7 +38,12 @@
 			limit: 8,
 			w: 250,
 			add: function(v){
-				var wrapper = $('<a class="link"></a>').attr('href', "/links/"+v.linkname).appendTo('.col-'+lw.curr).hide();
+				var wrapper = $('<a class="link link-unhover"></a>').attr('href', "/links/"+v.linkname).appendTo('.col-'+lw.curr).hide().hover(
+					function(){
+						$(this).removeClass('link-unhover');
+					}, function(){
+						$(this).addClass('link-unhover');
+					});
 				var name = $('<div class="link-name"></div>').html(v.title).appendTo(wrapper);
 				// var created_at = $('<div class="link-created"></div>').html(v.created).appendTo(link);
 				if (v.img!=null){
