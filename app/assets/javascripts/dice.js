@@ -7,16 +7,28 @@ var link = {
 	img_src: null,
 	url: null,
 	dp: $('<div id="dicepreview"></div>'),
-	dp_title: $('<div id="dicepreview-title"></div>'),
+	dp_title: $('<textarea id="dicepreview-title">'),
+	dp_title_view: $('<div id="dicepreview-title"></div>'),
 	dp_img: $('<img id="dicepreview-img">'),
 	setup: function(){
+		link.dp.empty();
+		link.dp_title_view.appendTo(link.dp);
+		link.dp_img.appendTo(link.dp);
+		return link.dp;
+	},
+	setupForm: function(){
+		link.dp.empty();
 		link.dp_title.appendTo(link.dp);
 		link.dp_img.appendTo(link.dp);
 		return link.dp;
 	},
 	setTitle: function(title){
 		link.title = title;
-		link.dp_title.html(title);
+		link.dp_title.val(title);
+		link.dp_title_view.html(title);
+	},
+	getTitle: function(){
+		return link.dp_title.val();
 	},
 	setImg: function(src){
 		link.img_src = src;
@@ -91,7 +103,7 @@ var dice = {
 			url: api_domain+'/links/create.json',
 			data: {
 				api_token: $.cookie('api_token'),
-				title: link.title,
+				title: link.getTitle(),
 				img_src: link.img_src,
 				url: link.url
 			},
@@ -103,8 +115,8 @@ var dice = {
 			success: function(obj){				
 				unloading();
 				if(obj.status=='success'){
-					dice.dismiss();
-					link.show();					
+					
+					window.location = "/links/"+obj.data.linkname					
 				}else{
 					dice.dismiss();
 					errorMessage(obj.message);
@@ -114,11 +126,12 @@ var dice = {
 	},
 	crawl: function(){
 		$('#dicepreview-canvas').fadeOut(function(){$(this).remove();});
-		$('#dicepreview-wrapper').fadeOut(function(){$(this).remove();});			
+		$('#dicepreview-wrapper').fadeOut(function(){$(this).remove();});
+		$('#dice-save-button').fadeOut(function(){$(this).remove();});		
 		
 		var canvas = $('<div id="dicepreview-canvas"></div>').hide().appendTo('body').fadeIn();
 		var wrapper = $('<div id="dicepreview-wrapper"></div>').hide().appendTo('body').fadeIn();
-		var dp = link.setup().hide().appendTo(wrapper);
+		var dp = link.setupForm().hide().appendTo(wrapper);
 		var save = $('<a href="#" id="dice-save-button"></a>').html('save').hide().appendTo(dp).click(function(e){
 			e.preventDefault();
 			$(this).remove();
@@ -161,6 +174,7 @@ var dice = {
 	gallery: function(imgs){
 		var N = 7;
 		link.dp.hide();
+		$('#dicepreview-gallery').remove();
 		var wrapper = $('<div id="dicepreview-gallery"></div>').empty().hide().appendTo('#dicepreview-wrapper');
 		for (var i=0; i<N; i++){
 			$('<div class="dg-col"></div>').attr('id', 'dg-'+i).appendTo(wrapper);
